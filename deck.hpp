@@ -1,12 +1,13 @@
 #pragma once
-
 #include <ostream>
 #include <stdexcept>
 
 template <typename T>
-class MyDeck {
+class MyDeck 
+{
 private:
-    struct Node {
+    struct Node 
+    {
         T value;
         Node* next;
         Node* prev;
@@ -21,59 +22,77 @@ private:
 public:
     MyDeck() = default;
 
-    ~MyDeck() {
-        while (head) {
+    ~MyDeck() 
+    {
+        while (head) 
+        {
             Node* temp = head;
             head = head->next;
             delete temp;
         }
-        tail = nullptr; // Добавлено для ясности, хотя и необязательно
-        elements = 0; //Добавлено для ясности
+        tail = nullptr; 
+        elements = 0; 
     }
 
-    void push_back(const T& value) { // Добавлена константная ссылка
+    void push_back(const T& value) 
+    { 
         Node* newNode = new Node(value, tail);
-        if (empty()) {
+        if (empty()) 
+        {
             head = newNode;
-        } else {
+        } 
+        else 
+        {
             tail->next = newNode;
         }
         tail = newNode;
-        ++elements; // Префиксный инкремент чуть эффективнее
+        ++elements; 
     }
-     void push_front(const T& value) { // Добавлена константная ссылка
+
+    void push_front(const T& value) 
+    { 
         Node* newNode = new Node(value, nullptr, head);
-        if (empty()) {
+        if (empty()) 
+        {
             tail = newNode;
-        } else {
+        } 
+        else 
+        {
             head->prev = newNode;
         }
         head = newNode;
         ++elements;
     }
 
-    T pop_back() {
-        if (empty()) {
+    T pop_back() 
+    {
+        if (empty()) 
+        {
             throw std::out_of_range("Дек пуст");
         }
 
         Node* temp = tail;
-        T val = temp->value; // Переименовал для единообразия
+        T val = temp->value; 
         tail = tail->prev;
 
-        if (!tail) { // Более лаконичная проверка на nullptr
+        if (!tail) 
+        { 
             head = nullptr;
-        } else {
+        } 
+        else 
+        {
             tail->next = nullptr;
         }
 
         delete temp;
-        --elements; // Префиксный декремент
+        --elements; 
         return val;
     }
 
-    T pop_front() {
-        if (empty()) {
+    T pop_front() 
+    {
+        if (empty()) 
+        {
             throw std::out_of_range("Дек пуст");
         }
 
@@ -81,9 +100,12 @@ public:
         T val = temp->value;
         head = head->next;
 
-        if (!head) {
+        if (!head) 
+        {
             tail = nullptr;
-        } else {
+        } 
+        else 
+        {
             head->prev = nullptr;
         }
 
@@ -92,20 +114,25 @@ public:
         return val;
     }
 
-    [[nodiscard]] bool empty() const {
-        return !elements; // Более короткая запись
+    [[nodiscard]] bool empty() const 
+    {
+        return !elements; 
     }
 
-    [[nodiscard]] int size() const {
+    [[nodiscard]] int size() const 
+    {
         return elements;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const MyDeck<T>& deck) { //const ссылка
+    friend std::ostream& operator<<(std::ostream& os, const MyDeck<T>& deck) 
+    {
         os << '[';
         Node* current = deck.head;
-        while (current) { // Более лаконичная проверка на nullptr
+        while (current) 
+        { 
             os << current->value;
-            if (current->next) {
+            if (current->next) 
+            {
                 os << ", ";
             }
             current = current->next;
@@ -114,4 +141,3 @@ public:
         return os;
     }
 };
-
